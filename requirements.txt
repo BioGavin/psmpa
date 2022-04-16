@@ -1,0 +1,10 @@
+blast==2.12.0
+biom-format
+biopython
+epa-ng
+gappa
+hmmer
+joblib
+numpy
+pandas
+r-castor

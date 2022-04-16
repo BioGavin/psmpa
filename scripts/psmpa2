@@ -1,0 +1,90 @@
+#!/usr/bin/env python
+
+
+import argparse
+import os
+import time
+import sys
+from psmpa.psmpa2 import psmpa2_pipeline
+from psmpa.util import get_version
+from psmpa.default import project_dir
+
+version = get_version(os.path.join(project_dir, '__init__.py'))
+
+PSMPA2_METHODS = ['mean_float', 'mean_int', 'median_float', 'median_int']
+
+parser = argparse.ArgumentParser(
+    prog='psmpa2',
+
+    description="""
+Source code: https://github.com/BioGavin/psmpa
+
+Predicting Secondary Metabolism Potential using microbial Amplicons based on BLAST strategy.""",
+
+    epilog="""
+example:
+psmpa2 -s sequences.fasta -i feature-table.biom -o psmpa2_result """,
+
+    formatter_class=argparse.RawDescriptionHelpFormatter
+
+)
+
+parser.add_argument('-s', '--study_fasta', metavar='PATH', required=True,
+                    type=str, help='FASTA of unaligned study sequences (i.e. '
+                                   'amplicons or 16S rRNA)')
+
+parser.add_argument('-i', '--input', metavar='PATH', type=str,
+                    help='Input table of sequence abundances (BIOM, TSV or '
+                         'mothur shared file format)')
+
+parser.add_argument('-o', '--output', metavar='PATH', required=True,
+                    type=str, help='Output folder for final files')
+
+parser.add_argument('-f', '--force', default=False, action='store_true',
+                    help='Overwrite existed output folder (default: %(default)s)')
+
+parser.add_argument('-m', '--method', default='mean_float',
+                    choices=PSMPA2_METHODS,
+                    help='statistics method to use. '
+                         '"mean_float": average float number of BGC in reference sequence cluster. '
+                         '"mean_int": average integer number of BGC in reference sequence cluster. '
+                         '"median_float": median float number of BGC in reference sequence cluster. '
+                         '"median_int": median interger number of BGC in reference sequence cluster. '
+                         '(default: %(default)s)')
+
+parser.add_argument('-p', '--blast_thread', type=int, default=4,
+                    help='Number of processes to run in parallel (default: '
+                         '%(default)d)')
+
+parser.add_argument('-t', '--threshold', type=int, default=0,
+                    help='Blast percent identity cutoff (default: %(default)s)')
+
+parser.add_argument('--verbose', default=False, action='store_true',
+                    help='Print out details as commands are run (default: %(default)s)')
+
+parser.add_argument('-v', '--version', default=False, action='version',
+                    version="%(prog)s " + version)
+
+
+def main():
+    start_time = time.time()
+
+    args = parser.parse_args()
+
+    psmpa2_pipeline(study_fasta=args.study_fasta,
+                    input_table=args.input,
+                    output_folder=args.output,
+                    force=args.force,
+                    method=args.method,
+                    blast_thread=args.blast_thread,
+                    threshold=args.threshold,
+                    verbose=args.verbose)
+
+    if args.verbose:
+        elapsed_time = time.time() - start_time
+        print("Completed psmpa2 pipeline in " + "%.2f" % elapsed_time +
+              " seconds.", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

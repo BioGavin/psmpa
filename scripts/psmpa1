@@ -1,0 +1,131 @@
+#!/usr/bin/env python
+
+
+import argparse
+import sys
+import os
+import time
+from psmpa.util import restricted_float, get_version
+from psmpa.psmpa1 import psmpa1_pipeline
+from psmpa.default import project_dir
+
+version = get_version(os.path.join(project_dir, '__init__.py'))
+
+HSP_METHODS = ['mp', 'emp_prob', 'pic', 'scp', 'subtree_average']
+
+parser = argparse.ArgumentParser(
+    prog='psmpa1',
+
+    description="""
+
+Source code: https://github.com/BioGavin/psmpa
+
+Run sequence placement with EPA-NG and GAPPA to place study sequences (i.e. OTUs and ASVs) into a reference tree. 
+Then runs hidden-state prediction with the castor R package to predict secondary metabolism potential for each study sequence.""",
+
+    epilog="""
+example:
+psmpa1 -s sequences.fasta -i feature-table.biom -o psmpa1_result """,
+
+    formatter_class=argparse.RawDescriptionHelpFormatter
+)
+
+parser.add_argument('-s', '--study_fasta', metavar='PATH', required=True,
+                    type=str, help='FASTA of unaligned study sequences (i.e. '
+                                   'amplicons or 16S rRNA).')
+
+parser.add_argument('-i', '--input', metavar='PATH', type=str,
+                    help='Input table of sequence abundances (BIOM, TSV or '
+                         'mothur shared file format).')
+
+parser.add_argument('-o', '--output', metavar='PATH', required=True,
+                    type=str, help='Output folder for final files.')
+
+parser.add_argument('-p', '--processes', type=int, default=4,
+                    help='Number of processes to run in parallel (default: '
+                         '%(default)d).')
+
+parser.add_argument('-t', '--placement_tool', metavar='epa-ng|sepp',
+                    choices=['epa-ng', 'sepp'], default="epa-ng",
+                    help='Placement tool to use when placing sequences into '
+                         'reference tree. One of \"epa-ng\" or \"sepp\" '
+                         'must be input (default: %(default)s)')
+
+parser.add_argument('--min_align', type=restricted_float, default=0.8,
+                    help='Proportion of the total length of an input query '
+                         'sequence that must align with reference sequences. '
+                         'Any sequences with lengths below this value after '
+                         'making an alignment with reference sequences will '
+                         'be excluded from the placement and all subsequent '
+                         'steps. (default: %(default)d).')
+
+parser.add_argument('-m', '--hsp_method', default='mp',
+                    choices=HSP_METHODS,
+                    help='HSP method to use.' +
+                         '"mp": predict discrete traits using max parsimony. '
+                         '"emp_prob": predict discrete traits based on empirical '
+                         'state probabilities across tips. "subtree_average": '
+                         'predict continuous traits using subtree averaging. '
+                         '"pic": predict continuous traits with phylogentic '
+                         'independent contrast. "scp": reconstruct continuous '
+                         'traits using squared-change parsimony (default: '
+                         '%(default)s).')
+
+parser.add_argument('-f', '--force', default=False, action='store_true',
+                    help='Overwrite existed output folder (default: %(default)s)')
+
+parser.add_argument('--remove_intermediate', default=False,
+                    action='store_true',
+                    help='Remove the intermediate outfiles of the sequence '
+                         'placement and pathway inference steps.')
+
+parser.add_argument('-n', '--calculate_NSTI', default=False, action='store_true',
+                    help='calculate nearest-sequenced taxon index '
+                         '(NSTI).')
+
+parser.add_argument('--chunk_size', default=500, type=int,
+                    help='Number of data entries to process at a time on one '
+                         'processor. (default: %(default)d).')
+
+parser.add_argument('-e', '--edge_exponent', default=0.5, type=float,
+                    help='Setting for maximum parisomony hidden-state '
+                         'prediction. Specifies weighting transition costs '
+                         'by the inverse length of edge lengths. If 0, then '
+                         'edge lengths do not influence predictions. Must be '
+                         'a non-negative real-valued number (default: '
+                         '%(default)f).')
+
+parser.add_argument('--verbose', default=False, action='store_true',
+                    help='Print out details as commands are run.')
+
+parser.add_argument('-v', '--version', default=False, action='version',
+                    version="%(prog)s " + version)
+
+
+def main():
+    start_time = time.time()
+
+    args = parser.parse_args()
+
+    psmpa1_pipeline(study_fasta=args.study_fasta,
+                    input_table=args.input,
+                    output_folder=args.output,
+                    processes=args.processes,
+                    placement_tool=args.placement_tool,
+                    min_align=args.min_align,
+                    hsp_method=args.hsp_method,
+                    remove_intermediate=args.remove_intermediate,
+                    force=args.force,
+                    chunk_size=args.chunk_size,
+                    edge_exponent=args.edge_exponent,
+                    calc_nsti=args.calculate_NSTI,
+                    verbose=args.verbose)
+
+    if args.verbose:
+        elapsed_time = time.time() - start_time
+        print("Completed psmpa pipeline in " + "%.2f" % elapsed_time +
+              " seconds.", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

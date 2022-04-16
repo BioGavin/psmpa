@@ -1,0 +1,38 @@
+# database
+/database/basedata/psmpa_antismash_result.tsv.gz
+/database/basedata/antismash_5.2.0_result.tsv.gz
+/database/psmpa1
+/database/psmpa2
+/database/picrust2
+
+
+# evaluation
+/evaluation/
+/evaluation/history
+
+/evaluation/evaluation_data/f.fuzznuc
+/evaluation/evaluation_data/failed.fasta
+/evaluation/evaluation_data/multiplexed_count_ite_1.gz
+/evaluation/evaluation_data/multiplexed_ite_1.gz
+/evaluation/evaluation_data/r.fuzznuc
+
+
+/evaluation/evaluation_result
+
+# application
+/application/history
+/application
+
+# PyPI
+/dist
+/psmpa.egg-info
+
+# doc
+/doc
+
+# logo
+/logo/psmpa_logo.ai
+
+# test
+/test/test_py
+/test/test_out

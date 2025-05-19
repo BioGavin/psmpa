@@ -3,4 +3,4 @@
 __author__ = "The PSMPA Development Team"
 __copyright__ = "The PSMPA Project"
 __license__ = "GPL"
-__version__ = "1.1.1"
+__version__ = "1.2.0.post1"

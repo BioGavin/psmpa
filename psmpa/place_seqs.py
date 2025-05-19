@@ -11,8 +11,8 @@ import numpy as np
 
 from psmpa.default import default_psmpa1_ref_dir
 from psmpa.util import (system_call_check, make_output_dir, read_fasta,
-                           read_phylip, write_fasta, write_phylip,
-                           read_stockholm)
+                        read_phylip, write_fasta, write_phylip,
+                        read_stockholm)
 
 
 def place_seqs_pipeline(study_fasta,
@@ -46,7 +46,7 @@ def place_seqs_pipeline(study_fasta,
                       out_stockholm + " " + hmm + " " + study_fasta,
                       print_command=verbose, print_stdout=verbose,
                       print_stderr=verbose)
-    
+
     hmmalign_out = read_stockholm(out_stockholm, clean_char=True)
 
     ref_seqnames = set(list(read_fasta(ref_msa).keys()))
@@ -142,8 +142,9 @@ def run_papara(tree: str, ref_msa: dict, study_fasta: str, out_dir: str,
     chdir(orig_wd)
 
     # Read in papara phylip output and return.
-    return(read_phylip(path.join(out_dir, "papara_alignment.out"),
-                       check_input=True))
+    return (read_phylip(path.join(out_dir, "papara_alignment.out"),
+                        check_input=True))
+
 
 def split_ref_study_papara(papara_out: dict, ref_seqnames: set, ref_fasta: str,
                            study_fasta: str):
@@ -163,6 +164,7 @@ def split_ref_study_papara(papara_out: dict, ref_seqnames: set, ref_fasta: str,
 
     write_fasta(ref_papara_subset, ref_fasta)
     write_fasta(study_papara_subset, study_fasta)
+
 
 def run_epa_ng(tree: str, ref_msa_fastafile: str, study_msa_fastafile: str,
                model: str, out_dir: str, chunk_size=5000,
@@ -190,6 +192,7 @@ def run_epa_ng(tree: str, ref_msa_fastafile: str, study_msa_fastafile: str,
     jplace_parsed = path.join(out_dir, "epa_result_parsed.jplace")
     parse_jplace(jplace_orig, jplace_parsed)
 
+
 def gappa_jplace_to_newick(jplace_file: str, outfile: str, print_cmds=False):
     '''System call to gappa binary to convert jplace object to newick
     treefile (with specified filename).'''
@@ -209,6 +212,7 @@ def gappa_jplace_to_newick(jplace_file: str, outfile: str, print_cmds=False):
     # Rename newick file to be specified outfile.
     system_call_check("mv " + newick_file + " " + outfile,
                       print_command=print_cmds)
+
 
 def identify_ref_files(in_dir, placement_method):
     '''Given a directory will check whether the four required reference files
@@ -269,7 +273,7 @@ def identify_ref_files(in_dir, placement_method):
             path2return.append(other)
         else:
             missing_files.append(other)
-    
+
     if missing_fasta:
         print("No FASTA file found in specified directory. Expected to find "
               "one of:\n" + "\n".join(possible_fasta) + "\n\n", file=sys.stderr)
@@ -279,15 +283,16 @@ def identify_ref_files(in_dir, placement_method):
                   "expected file(s) could not be found:\n" +
                   "\n".join(missing_files) + "\n\n", file=sys.stderr)
     elif len(missing_files) > 0:
-            if len(missing_files) > 0:
-                print("The following expected file(s) could not be found:\n" +
-                      "\n".join(missing_files) + "\n\n", file=sys.stderr)
+        if len(missing_files) > 0:
+            print("The following expected file(s) could not be found:\n" +
+                  "\n".join(missing_files) + "\n\n", file=sys.stderr)
 
     if missing_fasta or len(missing_files) > 0:
         sys.exit("Error - missing at least one of the four reference files in "
                  "this specified directory: " + in_dir)
 
-    return(path2return)
+    return (path2return)
+
 
 def parse_jplace(jplace_in, jplace_out):
     '''Parse jplace file to retain only a single placement per ASV (with the
@@ -308,7 +313,7 @@ def parse_jplace(jplace_in, jplace_out):
         placement_names.append(datastore["placements"][i]["n"][0])
 
         asv_placements = datastore["placements"][i]["p"]
-        
+
         # For ASVs with multiple placements only retain a single placement.
         if len(asv_placements) == 1:
             next
@@ -338,6 +343,7 @@ def parse_jplace(jplace_in, jplace_out):
     # Write out sorted and parsed jplace object.
     with open(jplace_out, 'w') as f:
         json.dump(datastore, f, indent=4, sort_keys=False)
+
 
 def check_alignments(raw_seqs, aligned_seqs, min_align, verbose):
     '''Check that all study sequences are at least a high % of their original
@@ -381,14 +387,15 @@ def check_alignments(raw_seqs, aligned_seqs, min_align, verbose):
 
     if len(poorly_aligned) == len(raw_seqnames):
         sys.exit("Stopping - all " + str(len(raw_seqnames)) + " input "
-                 "sequences aligned poorly to reference sequences (--min_align "
-                 "option specified a minimum proportion of " + str(min_align) +
+                                                              "sequences aligned poorly to reference sequences (--min_align "
+                                                              "option specified a minimum proportion of " + str(
+            min_align) +
                  " aligning to reference sequences).")
 
     elif len(poorly_aligned) > 0:
         print("Warning - " + str(len(poorly_aligned)) + " input sequences "
-              "aligned poorly to reference sequences (--min_align option "
-              "specified a minimum proportion of " + str(min_align) +
+                                                        "aligned poorly to reference sequences (--min_align option "
+                                                        "specified a minimum proportion of " + str(min_align) +
               " aligning to reference sequences). These input sequences will "
               "not be placed and will be excluded from downstream steps.\n\n"
               "This is the set of poorly aligned input sequences to be "
@@ -403,7 +410,7 @@ def check_alignments(raw_seqs, aligned_seqs, min_align, verbose):
                   str(min_study_seq_length) + " to " +
                   str(max_study_seq_length) + "\n", file=sys.stderr)
 
-    return(passing)
+    return (passing)
 
 
 def run_sepp(tree: str, ref_msa_fastafile: str, study_msa_fastafile: str,
@@ -425,26 +432,24 @@ def run_sepp(tree: str, ref_msa_fastafile: str, study_msa_fastafile: str,
     # Give error if either reference or query FASTA gzipped.
     ref_fasta_basename = path.basename(ref_msa_fastafile)
     ref_fasta_ext = path.splitext(ref_fasta_basename)[1]
-    
+
     study_fasta_basename = path.basename(study_msa_fastafile)
     study_fasta_ext = path.splitext(study_fasta_basename)[1]
 
     if ref_fasta_ext == ".gz" or study_fasta_ext == ".gz":
 
         if ref_fasta_ext == ".gz":
-
             print("\nTo place sequences with SEPP all input FASTAs must be "
                   "decompressed. Please run gunzip on this reference file "
                   "before re-running: " + ref_msa_fastafile + "\n",
                   file=sys.stderr)
-        
-        if study_fasta_ext == ".gz":
 
+        if study_fasta_ext == ".gz":
             print("\nTo place sequences with SEPP all input FASTAs must be "
                   "decompressed. Please run gunzip on the query FASTA file "
                   "before re-running: " + study_msa_fastafile + "\n",
                   file=sys.stderr)
-        
+
         sys.exit("\nStopped running due to at least one input FASTA being "
                  "gzipped (which SEPP does not allow).\n")
 
@@ -452,5 +457,3 @@ def run_sepp(tree: str, ref_msa_fastafile: str, study_msa_fastafile: str,
 
     system_call_check(sepp_command, print_command=print_cmds,
                       print_stdout=print_cmds, print_stderr=print_cmds)
-
-

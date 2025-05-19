@@ -117,12 +117,12 @@ def psmpa1_pipeline(study_fasta,
         if func == '16S':
             hsp_table = pd.merge(get_query_seq_id(study_fasta), hsp_table, how='left',
                                  left_on=['qseqid'], right_on=['qseqid']).set_index(['qseqid'])
-
         if func == 'BGC':
-            hsp_table = hsp_table.loc[:, (hsp_table != 0).any(axis=0)]
+            # hsp_table = hsp_table.loc[:, (hsp_table != 0).any(axis=0)]
             hsp_table = pd.merge(get_query_seq_id(study_fasta), hsp_table, how='left',
                                  left_on=['qseqid'], right_on=['qseqid']).set_index(['qseqid'])
             hsp_table = calc_bgc_sum(hsp_table)
+
         hsp_out[hsp_outfile] = hsp_table
     for fn, df in hsp_out.items():
         fp = path.join(output_folder, fn)

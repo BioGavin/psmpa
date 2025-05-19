@@ -49,7 +49,6 @@ def castor_hsp_workflow(tree_path,
         file_subsets = []
 
         for i in range(ceil(num_chunks)):
-
             subset_file = path.join(temp_dir, "subset_tab_" + str(i))
 
             subset_tab = trait_tab.iloc[:, i * chunk_size:(i + 1) * chunk_size]
@@ -61,15 +60,15 @@ def castor_hsp_workflow(tree_path,
             file_subsets.append(subset_file)
 
         castor_out_raw = Parallel(n_jobs=num_proc)(delayed(
-                                    castor_hsp_wrapper)(tree_path,
-                                                        trait_in,
-                                                        hsp_method,
-                                                        edge_exponent,
-                                                        calc_ci,
-                                                        check_input,
-                                                        ran_seed,
-                                                        verbose)
-                                    for trait_in in file_subsets)
+            castor_hsp_wrapper)(tree_path,
+                                trait_in,
+                                hsp_method,
+                                edge_exponent,
+                                calc_ci,
+                                check_input,
+                                ran_seed,
+                                verbose)
+                                                   for trait_in in file_subsets)
 
     # Get lists of predictions and CIs for all chunks.
     predict_out_chunks = []
@@ -91,7 +90,7 @@ def castor_hsp_workflow(tree_path,
     if calc_ci:
         ci_out_combined = pd.concat(ci_out_chunks, axis=1, sort=True)
 
-    return(predict_out_combined, ci_out_combined)
+    return (predict_out_combined, ci_out_combined)
 
 
 def castor_hsp_wrapper(tree_path, trait_tab, hsp_method, edge_exponent=0.5,
@@ -142,7 +141,7 @@ def castor_hsp_wrapper(tree_path, trait_tab, hsp_method, edge_exponent=0.5,
             asr_table.set_index('qseqid', drop=True, inplace=True)
         except IOError:
             raise ValueError("Cannot read in expected output file" +
-                            output_ci_path)
+                             output_ci_path)
 
         if calc_ci:
             asr_ci_table = pd.read_csv(filepath_or_buffer=output_ci_path,
@@ -166,7 +165,6 @@ def castor_nsti(tree_path,
 
     # Create temporary directory for working in.
     with TemporaryDirectory() as temp_dir:
-
         # Output known tip names to temp file
         # (note this object is a numpy.ndarray)
         known_tips_out = path.join(temp_dir, "known_tips.txt")
@@ -184,7 +182,6 @@ def castor_nsti(tree_path,
                           print_stdout=verbose,
                           print_stderr=verbose)
 
-
         # Read in calculated NSTI values.
         nsti_out = pd.read_csv(nsti_tmp_out, sep="\t", dtype={'sequence': str})
         nsti_out.set_index('sequence', drop=True, inplace=True)
@@ -193,6 +190,4 @@ def castor_nsti(tree_path,
     if len(known_tips) != nsti_out.shape[0]:
         ValueError("Number of rows in returned NSTI table is incorrect.")
 
-    return(nsti_out)
-
-
+    return (nsti_out)

@@ -1,0 +1,82 @@
+#!/usr/bin/env python
+
+
+import argparse
+import warnings
+import os
+import time
+import sys
+from psmpa.psmpa_fungi import psmpa_pipeline
+from psmpa.util import get_version
+from psmpa.default import project_dir
+
+version = get_version(os.path.join(project_dir, '__init__.py'))
+
+parser = argparse.ArgumentParser(
+    prog='psmpa-fungi',
+
+    description="""
+Source code: https://github.com/BioGavin/psmpa-fungi
+
+Predicting Fungal Secondary Metabolism Potential using microbial Amplicons based on BLAST strategy.""",
+
+    epilog="""
+example:
+psmpa-fungi -s sequences.fasta -o result """,
+
+    formatter_class=argparse.RawDescriptionHelpFormatter
+
+)
+
+parser.add_argument('-s', '--study_fasta', metavar='PATH', required=True,
+                    type=str, help='FASTA of unaligned study sequences (i.e. '
+                                   'amplicons or 16S rRNA)')
+
+# parser.add_argument('-i', '--input', metavar='PATH', type=str,
+#                     help='Input table of sequence abundances (BIOM, TSV or '
+#                          'mothur shared file format)')
+
+parser.add_argument('-o', '--output', metavar='PATH', required=True,
+                    type=str, help='Output folder for final files')
+
+parser.add_argument('-f', '--force', default=False, action='store_true',
+                    help='Overwrite existed output folder (default: %(default)s)')
+
+parser.add_argument('-p', '--blast_thread', type=int, default=4,
+                    help='Number of processes to run in parallel (default: '
+                         '%(default)d)')
+
+parser.add_argument('-t', '--threshold', type=int, default=0,
+                    help='Blast percent identity cutoff (default: %(default)s)')
+
+parser.add_argument('--verbose', default=False, action='store_true',
+                    help='Print out details as commands are run (default: %(default)s)')
+
+parser.add_argument('-v', '--version', default=False, action='version',
+                    version="%(prog)s " + version)
+
+
+def main():
+    warnings.filterwarnings("ignore")
+
+    start_time = time.time()
+
+    args = parser.parse_args()
+
+    psmpa_pipeline(study_fasta=args.study_fasta,
+                   input_table=None,
+                   output_folder=args.output,
+                   force=args.force,
+                   method="default",
+                   blast_thread=args.blast_thread,
+                   threshold=args.threshold,
+                   verbose=args.verbose)
+
+    if args.verbose:
+        elapsed_time = time.time() - start_time
+        print("Completed psmpa-fungi pipeline in " + "%.2f" % elapsed_time +
+              " seconds.", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

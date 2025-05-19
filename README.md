@@ -65,3 +65,9 @@ psmpa2 -s sequences.fasta -i feature-table.biom -o psmpa2_sample_test_out
 # Explanation
 
 If empty rows appear in the BGCs predicted result, the likely reason is that the BLAST analysis did not match any sequences. So, if sample analysis is performed, sequences with no results are ignored.
+
+
+
+# Bug
+
+- If sequence headers are number, pump will fail.

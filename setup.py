@@ -21,7 +21,7 @@ version = get_version(path.join(curr_dir, 'psmpa', '__init__.py'))
 
 long_description = (
     "PSMPA is a Python pipeline to predict secondary metabolism potential"
-    " using 16S rRNA or amplicans for a single strain or microbial communities.")
+    " using 16S/18S rRNA or amplicans for a single strain or microbial communities.")
 
 setup(name='psmpa',
       version=version,
@@ -34,7 +34,7 @@ setup(name='psmpa',
                    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
                    "Operating System :: OS Independent"],
       packages=['psmpa'],
-      scripts=['scripts/psmpa1', 'scripts/psmpa2'],
+      scripts=['scripts/psmpa1', 'scripts/psmpa2', 'scripts/psmpa-fungi'],
       include_package_data=True,
       python_requires=">=3.8",
       install_requires=['numpy', 'biopython', 'pandas', 'biom-format', 'joblib'],
@@ -42,5 +42,7 @@ setup(name='psmpa',
                               'default_files/psmpa1/*.gz',
                               'default_files/psmpa1/pro_ref/*',
                               'default_files/psmpa2/*.tsv.gz',
-                              'default_files/psmpa2/blast_db/*']},
+                              'default_files/psmpa2/blast_db/*',
+                              'default_files/psmpa_fungi/*.gz',
+                              'default_files/psmpa_fungi/blast_db/*']},
       long_description=long_description)

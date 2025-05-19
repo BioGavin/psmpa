@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-
+import shutil
+import zipfile
 
 from Bio import SeqIO
 import os
@@ -881,7 +882,7 @@ def create_output_folder(output_folder):
     try:
         os.makedirs(output_folder)
     except:
-        raise Exception(f'Stopping since output directory ' + {output_folder} + ' already exists.')
+        raise Exception(f'Stopping since output directory "{output_folder}" already exists.')
 
 
 def get_query_seq_id(query):

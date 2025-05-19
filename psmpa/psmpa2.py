@@ -226,7 +226,7 @@ def psmpa2_pipeline(study_fasta,
     # match the corresponding information
     match = Matcher(query=study_fasta, blast_out=blast_out, method=method)
     psmpa2_result = match.qseqid_blastresult_lineage_match_bgc().fillna(0)
-    psmpa2_result = psmpa2_result.loc[:, (psmpa2_result != 0).any(axis=0)]
+    # psmpa2_result = psmpa2_result.loc[:, (psmpa2_result != 0).any(axis=0)]
     bool_cond = psmpa2_result['sseqid'] == 0
     psmpa2_result[bool_cond] = psmpa2_result[bool_cond].replace({0, '0'}, np.nan)
     df_to_save['psmpa2_BGC_result.tsv.gz'] = psmpa2_result

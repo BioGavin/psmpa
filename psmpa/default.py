@@ -41,3 +41,10 @@ default_psmpa1_tables = {
     "16S": path.join(default_psmpa1_dir, "16S.tsv.gz"),
     "BGC": path.join(default_psmpa1_dir, "bgc.tsv.gz")
 }
+
+# psmpa-fungi default files directory
+default_psmpa_fungi_dir = path.join(project_dir, "default_files", "psmpa_fungi")
+
+default_psmpa_fungi_blast_database = path.join(default_psmpa_fungi_dir, "blast_db", "ref18S")
+
+default_psmpa_fungi_database = {"default": path.join(default_psmpa_fungi_dir, "psmpa_fungi_database_default.tsv.gz")}

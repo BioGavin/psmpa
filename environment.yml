@@ -1,0 +1,18 @@
+name: psmpa
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python==3.8.18
+  - blast=2.12.0
+  - hmmer=3.3.2
+  - gappa=0.8.0
+  - epa-ng=0.3.8
+  - r-castor=1.7.11
+  - pip:
+    - biom-format==2.1.12
+    - biopython==1.79
+    - joblib>=1.2.0
+    - numpy==1.22.3
+    - pandas==1.4.2

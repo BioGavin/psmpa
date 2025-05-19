@@ -12,7 +12,7 @@ Specific libraries are required for PSMPA. We provide a requirements file to ins
 Here, We recommende Conda for environment deployment.
 
 ```shell
-conda create --file requirements.txt -n psmpa
+conda env create -f environment.yml
 ```
 If you have successfully created this environment, don't forget to activate it.
 ```shell
@@ -66,8 +66,3 @@ psmpa2 -s sequences.fasta -i feature-table.biom -o psmpa2_sample_test_out
 
 If empty rows appear in the BGCs predicted result, the likely reason is that the BLAST analysis did not match any sequences. So, if sample analysis is performed, sequences with no results are ignored.
 
-
-
-# Bug
-
-- If sequence headers are number, pump will fail.

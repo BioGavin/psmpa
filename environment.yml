@@ -4,7 +4,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python==3.8.18
+  - python=3.8.18
   - blast=2.12.0
   - hmmer=3.3.2
   - gappa=0.8.0

@@ -1,6 +1,6 @@
 # PSMPA
 
-[![PyPI version](https://img.shields.io/badge/pypi%20package-1.1.1-brightgreen)](https://pypi.org/project/psmpa/) [![Licence](https://img.shields.io/badge/licence-GPLv3-blue)](https://opensource.org/licenses/GPL-3.0/) [![Web](https://img.shields.io/badge/version-web-red)](https://www.psmpa.net/analysis)
+[![PyPI version](https://img.shields.io/badge/pypi%20package-1.1.1-brightgreen)](https://pypi.org/project/psmpa/) [![Licence](https://img.shields.io/badge/licence-GPLv3-blue)](https://opensource.org/licenses/GPL-3.0/) [![Web](https://img.shields.io/badge/version-web-red)](https://www.psmpa.net)
 
 PSMPA is a Python pipeline to predict secondary metabolism potential using amplicans  for a single strain or microbial communities. We provide a web version for the convenience of users, you can [click here](https://www.psmpa.net/analysis).
 

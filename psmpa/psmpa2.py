@@ -140,6 +140,10 @@ class Matcher():
             A dataframe containing "qseqid", "sseqid", "pident" columns.
         """
         need_col_names = ["sseqid", "pident"]
+
+        # Ensure both sides of the merge use the same data type (string)
+        self.blast_result.index = self.blast_result.index.astype(str)
+
         qseqid_blastresult = pd.merge(self.qseqid, self.blast_result[need_col_names], how='left',
                                       left_on="qseqid", right_index=True).set_index(["qseqid"])
         return qseqid_blastresult

@@ -176,6 +176,7 @@ def psmpa2_pipeline(study_fasta,
                     force,
                     method,
                     threshold,
+                    relative_bgc_abundance,
                     verbose):
     """Function that contains wrapper commands for full psmpa2 pipeline.
 
@@ -248,7 +249,8 @@ def psmpa2_pipeline(study_fasta,
         # select the data columns involved in the operation
         psmpa2_result = psmpa2_result.drop(columns=['sseqid', 'pident', 'lineage']).fillna(0)
         # calculate the total number of BGCs for each sample
-        psmpa2_sample_result = sample_bgc_calculate(feature_table_amended, psmpa2_result)
+        psmpa2_sample_result = sample_bgc_calculate(feature_table_amended, psmpa2_result,
+                                                    relative_abundance=relative_bgc_abundance)
         df_to_save['psmpa2_sample_result.tsv.gz'] = psmpa2_sample_result
 
     # save all results

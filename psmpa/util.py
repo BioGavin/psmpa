@@ -840,18 +840,21 @@ def shuffle_predictions(input, outdir, rep, seed=None):
                                    compression="infer")
 
 
-def sample_bgc_calculate(feature_table, psmpa_result):
+def sample_bgc_calculate(feature_table, psmpa_result, relative_abundance=False):
     """Calculate BGC distribution of samples based on the feature table and bgc table.
 
     Args:
         feature_table: Feature table derived from clustering
         psmpa_result: BGCs distribution of each sequence obtained by psmpa analysis
+        relative_abundance: Whether to normalize BGC abundance by per-sample total abundance.
 
     Returns:
         A dataframe of sample BGCs distribution
     """
 
     sample_bgc_distribution = feature_table.T.dot(psmpa_result)
+    if relative_abundance:
+        sample_bgc_distribution = sample_bgc_distribution.div(feature_table.sum(axis=0), axis=0)
     return sample_bgc_distribution
 
 

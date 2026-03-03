@@ -59,6 +59,10 @@ parser.add_argument('-p', '--blast_thread', type=int, default=4,
 parser.add_argument('-t', '--threshold', type=int, default=0,
                     help='Blast percent identity cutoff (default: %(default)s)')
 
+parser.add_argument('--relative_bgc_abundance', default=False, action='store_true',
+                    help='Calculate relative BGC abundance in sample result by '
+                         'normalizing to total abundance per sample (default: %(default)s)')
+
 parser.add_argument('--verbose', default=False, action='store_true',
                     help='Print out details as commands are run (default: %(default)s)')
 
@@ -78,6 +82,7 @@ def main():
                     method=args.method,
                     blast_thread=args.blast_thread,
                     threshold=args.threshold,
+                    relative_bgc_abundance=args.relative_bgc_abundance,
                     verbose=args.verbose)
 
     if args.verbose:

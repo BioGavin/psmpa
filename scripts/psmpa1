@@ -98,6 +98,10 @@ parser.add_argument('-e', '--edge_exponent', default=0.5, type=float,
 parser.add_argument('--verbose', default=False, action='store_true',
                     help='Print out details as commands are run.')
 
+parser.add_argument('--relative_bgc_abundance', default=False, action='store_true',
+                    help='Calculate relative BGC abundance in sample result by '
+                         'normalizing to total abundance per sample (default: %(default)s).')
+
 parser.add_argument('-v', '--version', default=False, action='version',
                     version="%(prog)s " + version)
 
@@ -119,6 +123,7 @@ def main():
                     chunk_size=args.chunk_size,
                     edge_exponent=args.edge_exponent,
                     calc_nsti=args.calculate_NSTI,
+                    relative_bgc_abundance=args.relative_bgc_abundance,
                     verbose=args.verbose)
 
     if args.verbose:

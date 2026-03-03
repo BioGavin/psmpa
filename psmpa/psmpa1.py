@@ -23,6 +23,7 @@ def psmpa1_pipeline(study_fasta,
                     chunk_size,
                     calc_nsti,
                     hsp_method,
+                    relative_bgc_abundance,
                     remove_intermediate,
                     force,
                     verbose):
@@ -137,7 +138,8 @@ def psmpa1_pipeline(study_fasta,
         # print(feature_table.head())
         feature_table_amended = feature_table.div(copy_number['16S_rRNA_Count'], axis=0).fillna(0)
         # print(feature_table_amended.head())
-        sample_result = sample_bgc_calculate(feature_table_amended, bgc_table)
+        sample_result = sample_bgc_calculate(feature_table_amended, bgc_table,
+                                             relative_abundance=relative_bgc_abundance)
         sample_result.to_csv(path.join(output_folder, 'psmpa1_sample_result.tsv.gz'), sep='\t', compression='gzip')
 
 
